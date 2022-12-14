@@ -1,0 +1,42 @@
+Server:
+  RunMode: debug
+  HttpPort: 8090
+  ReadTimeout: 60
+  WriteTimeout: 60
+App:
+  DefaultPageSize: 10
+  MaxPageSize: 100
+  LogSavePath: ./storage/logs/
+  LogFileName: app
+  LogFileExt: .log
+  UploadSavePath: storage/uploads
+  UploadServerUrl: http://127.0.0.1:8090/static
+  UploadImageMaxSize: 5  # MB
+  UploadImageAllowExts:
+    - .jpg
+    - .jpeg
+    - .png
+Database:
+  DBType: mysql
+  UserName: root        # 填写你的数据库账号
+  Password: 123456      # 填写你的数据库密码
+  Host: 127.0.0.1:3306
+  DBName: achilles      # 填写你的数据库名称
+  TablePrefix: blog_
+  Charset: utf8mb4
+  ParseTime: True
+  MaxIdleConns: 10
+  MaxOpenConns: 30
+JWT:
+  Secret: 今天是个好日子！
+  Issuer: achilles-service
+  Expire: 7200
+Email:
+  Host: smtp.qq.com
+  Port: 465
+  UserName: xxxx@qq.com
+  Password: xxxxxxxx
+  IsSSL: true
+  From: xxxx@qq.com
+  To:
+    - xxxx@qq.com

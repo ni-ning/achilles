@@ -1,0 +1,276 @@
+definitions:
+  auth.AuthLoginRequest:
+    properties:
+      password:
+        maxLength: 128
+        minLength: 1
+        type: string
+      username:
+        maxLength: 128
+        minLength: 1
+        type: string
+    required:
+    - password
+    - username
+    type: object
+  auth.AuthRegisterRequest:
+    properties:
+      password:
+        maxLength: 128
+        minLength: 1
+        type: string
+      role:
+        enum:
+        - 0
+        - 1
+        type: integer
+      username:
+        maxLength: 128
+        minLength: 1
+        type: string
+    required:
+    - password
+    - username
+    type: object
+  blog.TagCreateRequest:
+    properties:
+      name:
+        maxLength: 100
+        minLength: 1
+        type: string
+      state:
+        enum:
+        - 0
+        - 1
+        type: integer
+    required:
+    - name
+    type: object
+  blog.TagUpdateRequest:
+    properties:
+      id:
+        minimum: 1
+        type: integer
+      name:
+        maxLength: 100
+        minLength: 1
+        type: string
+      state:
+        enum:
+        - 0
+        - 1
+        type: integer
+    required:
+    - id
+    type: object
+  errcode.Error:
+    type: object
+  model.Account:
+    properties:
+      id:
+        description: 主键
+        type: integer
+      role:
+        description: 角色 0 普通用户、1 管理员
+        type: integer
+      state:
+        description: 状态 0 为禁用、1 为启用
+        type: integer
+      username:
+        description: 用户名
+        type: string
+    type: object
+  model.Tag:
+    properties:
+      id:
+        description: 主键
+        type: integer
+      name:
+        description: 标签名称
+        type: string
+      state:
+        description: 状态 0 为禁用、1 为启用
+        type: integer
+    type: object
+info:
+  contact: {}
+  description: Go课程笔记 项目脚手架-博客后台
+  termsOfService: https://ni-ning/golang/blog.html
+  title: 博客后台系统
+  version: "1.0"
+paths:
+  /api/v1/login:
+    post:
+      parameters:
+      - description: 登录信息
+        in: body
+        name: tag
+        required: true
+        schema:
+          $ref: '#/definitions/auth.AuthLoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/model.Account'
+        "400":
+          description: 请求错误
+          schema:
+            $ref: '#/definitions/errcode.Error'
+        "500":
+          description: 内部错误
+          schema:
+            $ref: '#/definitions/errcode.Error'
+      summary: 用户登录
+      tags:
+      - 用户管理
+  /api/v1/register:
+    post:
+      parameters:
+      - description: 用户信息
+        in: body
+        name: tag
+        required: true
+        schema:
+          $ref: '#/definitions/auth.AuthRegisterRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/model.Account'
+        "400":
+          description: 请求错误
+          schema:
+            $ref: '#/definitions/errcode.Error'
+        "500":
+          description: 内部错误
+          schema:
+            $ref: '#/definitions/errcode.Error'
+      summary: 用户注册
+      tags:
+      - 用户管理
+  /api/v1/tags:
+    get:
+      parameters:
+      - description: 页码
+        in: query
+        name: page
+        type: integer
+      - description: 每页数量
+        in: query
+        name: page_size
+        type: integer
+      - description: 标签名
+        in: query
+        name: name
+        type: string
+      - description: 标签状态
+        in: query
+        name: state
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/model.Tag'
+        "400":
+          description: 请求错误
+          schema:
+            $ref: '#/definitions/errcode.Error'
+        "500":
+          description: 内部错误
+          schema:
+            $ref: '#/definitions/errcode.Error'
+      summary: 获取多个标签
+      tags:
+      - 博客后台
+    post:
+      parameters:
+      - description: 标签名
+        in: body
+        name: tag
+        required: true
+        schema:
+          $ref: '#/definitions/blog.TagCreateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/model.Tag'
+        "400":
+          description: 请求错误
+          schema:
+            $ref: '#/definitions/errcode.Error'
+        "500":
+          description: 内部错误
+          schema:
+            $ref: '#/definitions/errcode.Error'
+      summary: 新增标签
+      tags:
+      - 博客后台
+  /api/v1/tags/{id}:
+    delete:
+      parameters:
+      - description: 标签 ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/model.Tag'
+        "400":
+          description: 请求错误
+          schema:
+            $ref: '#/definitions/errcode.Error'
+        "500":
+          description: 内部错误
+          schema:
+            $ref: '#/definitions/errcode.Error'
+      summary: 删除指定标签
+      tags:
+      - 博客后台
+    put:
+      parameters:
+      - description: 标签 ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: 标签信息
+        in: body
+        name: tag
+        required: true
+        schema:
+          $ref: '#/definitions/blog.TagUpdateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/model.Tag'
+        "400":
+          description: 请求错误
+          schema:
+            $ref: '#/definitions/errcode.Error'
+        "500":
+          description: 内部错误
+          schema:
+            $ref: '#/definitions/errcode.Error'
+      summary: 更新指定标签
+      tags:
+      - 博客后台
+swagger: "2.0"

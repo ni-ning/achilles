@@ -1,0 +1,2 @@
+{"level":"INFO","timestamp":"2022-12-13T20:40:07.588+0800","caller":"gin@v1.8.1/context.go:173","msg":"Access Log","method":"GET","status_code":200,"begin_time":1670935207,"endTime":1670935207,"request":"","response":"{\"code\":0,\"list\":[{\"id\":1,\"name\":\"Golang\",\"state\":1}],\"pager\":{\"page\":1,\"page_size\":10,\"total_rows\":1}}"}
+{"level":"ERROR","timestamp":"2022-12-14T11:40:58.177+0800","caller":"gin@v1.8.1/context.go:173","msg":"context deadline exceeded"}
