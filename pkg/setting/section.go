@@ -1,6 +1,8 @@
 package setting
 
-import "time"
+import (
+	"time"
+)
 
 type ServerSettingS struct {
 	RunMode      string
@@ -59,7 +61,7 @@ func (s *Setting) ReadSection(k string, v interface{}) error {
 		return err
 	}
 
-	if _, ok := sections[k]; ok {
+	if _, ok := sections[k]; !ok {
 		sections[k] = v
 	}
 	return nil

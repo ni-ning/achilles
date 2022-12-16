@@ -19,6 +19,7 @@ const (
 	TypeTxt
 )
 
+// GetFileName 文件名md5加密处理
 func GetFileName(name string) string {
 	ext := GetFileExt(name)
 	fileName := strings.TrimSuffix(name, ext)

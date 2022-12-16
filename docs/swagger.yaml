@@ -273,4 +273,36 @@ paths:
       summary: 更新指定标签
       tags:
       - 博客后台
+  /upload/file:
+    post:
+      consumes:
+      - multipart/form-data
+      - application/x-www-form-urlencoded
+      parameters:
+      - description: 文件
+        in: formData
+        name: file
+        required: true
+        type: file
+      - description: 文件类型
+        in: query
+        name: type
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+        "400":
+          description: 请求错误
+          schema:
+            $ref: '#/definitions/errcode.Error'
+        "500":
+          description: 内部错误
+          schema:
+            $ref: '#/definitions/errcode.Error'
+      summary: 文件上传
+      tags:
+      - 文件上传
 swagger: "2.0"

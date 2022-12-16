@@ -17,6 +17,17 @@ func NewUpload() Upload {
 	return Upload{}
 }
 
+// @Summary 文件上传
+// @Tags 文件上传
+// @Accept	multipart/form-data
+// @Accept	application/x-www-form-urlencoded
+// @Produce json
+// @Param file formData file true "文件"
+// @Param type query int true "文件类型"
+// @Success 200 "成功"
+// @Failure 400 {object} errcode.Error "请求错误"
+// @Failure 500 {object} errcode.Error "内部错误"
+// @Router /upload/file [post]
 func (u Upload) UploadFile(c *gin.Context) {
 	response := app.NewResponse(c)
 	file, fileHeader, err := c.Request.FormFile("file")
@@ -25,7 +36,7 @@ func (u Upload) UploadFile(c *gin.Context) {
 		return
 	}
 
-	fileType := convert.StrTo(c.PostForm("type")).MustInt()
+	fileType := convert.StrTo(c.DefaultQuery("type", "1")).MustInt()
 	if fileHeader == nil || fileType <= 0 {
 		response.ToErrorResponse(errcode.InvalidParams)
 		return
