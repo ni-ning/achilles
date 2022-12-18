@@ -9,9 +9,13 @@ type Setting struct {
 	vp *viper.Viper
 }
 
-func NewSetting() (*Setting, error) {
+func NewSetting(configs ...string) (*Setting, error) {
 	vp := viper.New()
-	vp.AddConfigPath("config/")
+
+	// vp.AddConfigPath("config/")
+	for _, config := range configs {
+		vp.AddConfigPath(config)
+	}
 	vp.SetConfigName("config")
 	vp.SetConfigType("yaml")
 

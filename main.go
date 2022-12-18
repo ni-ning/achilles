@@ -3,8 +3,11 @@ package main
 import (
 	"achilles/global"
 	"context"
+	"flag"
+	"fmt"
 	"os"
 	"os/signal"
+	"strings"
 	"syscall"
 
 	"achilles/internal/model"
@@ -17,9 +20,24 @@ import (
 	"time"
 )
 
+var (
+	port    string
+	runMode string
+	config  string
+
+	isVersion    bool
+	buildTime    string
+	buildVersion string
+)
+
 func init() {
+	err := setupFlag()
+	if err != nil {
+		log.Fatalf("init.setupSetting err: %v", err)
+	}
+
 	// 先初始化全局配置项，其他如日志、DB就可以使用
-	err := setupSetting()
+	err = setupSetting()
 	if err != nil {
 		log.Fatalf("init.setupSetting err: %v", err)
 	}
@@ -40,8 +58,17 @@ func init() {
 	}
 }
 
+func setupFlag() error {
+	flag.StringVar(&port, "port", "", "启动端口")
+	flag.StringVar(&runMode, "mode", "", "启动模式")
+	flag.StringVar(&config, "config", "config/", "指定要使用的配置文件路径")
+	flag.BoolVar(&isVersion, "version", false, "编译信息")
+	flag.Parse()
+	return nil
+}
+
 func setupSetting() error {
-	setting, err := setting.NewSetting()
+	setting, err := setting.NewSetting(strings.Split(config, ",")...)
 	if err != nil {
 		return err
 	}
@@ -70,9 +97,17 @@ func setupSetting() error {
 	if err != nil {
 		return err
 	}
+	global.AppSetting.DefaultContextTimeout *= time.Second
 	global.JWTSetting.Expire *= time.Second
 	global.ServerSetting.ReadTimeout *= time.Second
 	global.ServerSetting.WriteTimeout *= time.Second
+
+	if port != "" {
+		global.ServerSetting.HttpPort = port
+	}
+	if runMode != "" {
+		global.ServerSetting.RunMode = runMode
+	}
 
 	return nil
 }
@@ -109,6 +144,12 @@ func setupTracer() error {
 // @description Go课程笔记 项目脚手架-博客后台
 // @termsOfService https://ni-ning/golang/blog.html
 func main() {
+	if isVersion {
+		fmt.Printf("build_time: %s\n", buildTime)
+		fmt.Printf("build_version: %s\n", buildVersion)
+		return
+	}
+
 	router := router.NewRouter()
 	s := &http.Server{
 		Addr:           ":" + global.ServerSetting.HttpPort,

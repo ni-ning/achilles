@@ -33,6 +33,8 @@ func AccessLog() gin.HandlerFunc {
 		endTime := time.Now().Unix()
 
 		global.Logger.Info("Access Log",
+			zap.String("trace_id", c.GetString("X-Trace-ID")),
+			zap.String("span_id", c.GetString("X-Span-ID")),
 			zap.String("method", c.Request.Method),
 			zap.Int("status_code", bodyWriter.Status()),
 			zap.Int64("begin_time", beginTime),

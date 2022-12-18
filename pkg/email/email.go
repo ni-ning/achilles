@@ -10,6 +10,7 @@ type Email struct {
 	*SMTPInfo
 }
 
+// 单独再包裹一层
 type SMTPInfo struct {
 	Host     string
 	Port     int
